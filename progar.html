@@ -80,7 +80,7 @@ footer{margin-top:16px;display:flex;justify-content:space-between;align-items:ce
       <div class="logo"><b style="color:#ffff00;">ISU</b></div>
       <div>
         <h2 style="color:#00ff00; margin:4px 0 0 0; font-weight:600;">INTEGRATED SYSTEM UPLOAD</h2>
-        <h1>PROGAR PUSLAT KODIKLATAU</h1>        
+        <h1>GUDKAI PUSLAT KODIKLATAU</h1>        
         <p style="font-size:12px;color:#ffff00">
         DATE/TIME : <span class="code-private" id="tanggal"></span>
         </p>
@@ -629,167 +629,119 @@ width:100%;">
 Kirim
 
 </button>
-
 </div>
 <script>
 
-window.addEventListener(
-"load",
+let stopChat=null;
 
-()=>{
+function loadChat(){
 
-document
-.getElementById(
+if(stopChat){
+stopChat();
+}
+
+const tujuan=
+document.getElementById(
+"tujuanChat"
+).value;
+
+const saya=
+window.SATKER_AKTIF;
+
+const room=
+[saya,tujuan]
+.sort()
+.join("_");
+
+document.getElementById(
+"chatList"
+).innerHTML="";
+
+stopChat=
+window.onChildAddedFirebase(
+window.ref(
+window.db,
+"chatRoom/"+room
+),
+(s)=>{
+const d=s.val();
+document.getElementById(
+"chatList"
+).innerHTML +=
+"<div style='margin-bottom:8px'>"
++"<b>["+
+d.dari+
+"]</b><br>"+
+d.pesan+
+"<br><small>"+
+d.waktu+
+"</small></div>";
+});
+}
+document.getElementById(
 "pesanBtn"
-)
-
-.onclick=()=>{
-
+).onclick=()=>{
 const box=
 document.getElementById(
 "chatBox"
 );
-
 box.style.display=
-
 box.style.display==="block"
-
 ?
-
 "none"
-
 :
-
 "block";
-
+loadChat();
 };
-
-document
-.getElementById(
+document.getElementById(
+"tujuanChat"
+).onchange=
+loadChat;
+</script> 
+  
+<script>
+document.getElementById(
 "kirimChat"
-)
-
-.onclick=
-
+).onclick=
 async()=>{
-
 const txt=
-
-document
-.getElementById(
+document.getElementById(
 "chatInput"
 )
-
-.value
-.trim();
-
+.value.trim();
+if(!txt)return;
 const tujuan=
-
-document
-.getElementById(
+document.getElementById(
 "tujuanChat"
 )
-
 .value;
-
-if(!txt)return;
-
+const saya=
+window.SATKER_AKTIF;
+const room=
+[saya,tujuan]
+.sort()
+.join("_");
 await window.setFirebase(
-
 window.ref(
-
 window.db,
-
-"chat/"+Date.now()
-
+"chatRoom/"+
+room+
+"/"+
+Date.now()
 ),
-
 {
-
-dari:
-window.SATKER_AKTIF,
-
-ke:
-tujuan,
-
-pesan:
-txt,
-
-waktu:
-new Date()
+dari:saya,
+ke:tujuan,
+pesan:txt,
+waktu:new Date()
 .toLocaleString(
 "id-ID"
-)
-
-}
-
-);
-
-document
-.getElementById(
+)});
+document.getElementById(
 "chatInput"
 ).value="";
-
+loadChat();
 };
-
-window.onChildAddedFirebase(
-
-window.ref(
-window.db,
-"chat"
-),
-
-(s)=>{
-
-const d=s.val();
-
-if(
-
-d.ke
-!==window.SATKER_AKTIF
-
-&&
-
-d.dari
-!==window.SATKER_AKTIF
-
-){
-
-return;
-
-}
-
-document
-.getElementById(
-"chatList"
-)
-
-.innerHTML
-
-+=
-
-"<div style='margin-bottom:5px'>["+
-
-d.dari+
-
-"]<br>"+
-
-d.pesan+
-
-"<br><small>"+
-
-d.waktu+
-
-"</small></div>";
-
-}
-
-);
-
-}
-
-);
-
 </script>
 </body>
 </html>
