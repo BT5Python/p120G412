@@ -176,37 +176,9 @@ font-weight:Normal;">
         <p class="small">Daftar file yang akan diupload.</p>
         <ul id="fileList" class="file-list"></ul>
         <footer>
-
-<span id="count">
-
-0 file
-
-</span>
-
-<div
-style="
-display:flex;
-gap:8px;">
-
-<button
-id="pesanBtn"
-class="btn">
-
-Chat
-
-</button>
-
-<button
-id="uploadBtn"
-class="btn primary">
-
-Upload
-
-</button>
-
-</div>
-
-</footer>
+          <span id="count">0 file</span>
+          <button id="uploadBtn" class="btn primary">Upload</button>
+        </footer>
       </aside>
     </section>
 
@@ -427,94 +399,28 @@ document.addEventListener("click", function() {
 }, { once: true });
 </script>
 <script type="module">
-import {
-initializeApp
-}
-
-from
-"https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-
-import {
-
-getDatabase,
-ref,
-set,
-onChildAdded
-
-}
-
-from
-
-"https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 const firebaseConfig = {
-apiKey: "AIzaSyC7SkdwajJl6pzXehN6zpeycNfT5ZHFXP4",
-authDomain: "portalmonitoring-a0926.firebaseapp.com",
-databaseURL: "https://portalmonitoring-a0926-default-rtdb.asia-southeast1.firebasedatabase.app/",
-projectId: "portalmonitoring-a0926",
-storageBucket: "portalmonitoring-a0926.appspot.com",
-messagingSenderId: "27756738323",
-appId: "1:27756738323:web:010277cc1eb9b7cdfa97cd"
+  apiKey: "AIzaSyC7SkdwajJl6pzXehN6zpeycNfT5ZHFXP4",
+  authDomain: "portalmonitoring-a0926.firebaseapp.com",
+  databaseURL: "https://portalmonitoring-a0926-default-rtdb.asia-southeast1.firebasedatabase.app/",
+  projectId: "portalmonitoring-a0926",
+  storageBucket: "portalmonitoring-a0926.appspot.com",
+  messagingSenderId: "27756738323",
+  appId: "1:27756738323:web:010277cc1eb9b7cdfa97cd"
 };
 
-const app =
-initializeApp(firebaseConfig);
-
-window.db =
-getDatabase(app);
-
-window.ref =
-ref;
-
-window.setFirebase =
-set;
-
-window.onChildAddedFirebase =
-onChildAdded;
-
-window.SATKER_AKTIF =
-
-localStorage.getItem(
-"satkerAktif"
-)
-
-||
-
-prompt(
-"Masukkan SATKER anda"
-);
-
-localStorage.setItem(
-"satkerAktif",
-window.SATKER_AKTIF
-);
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
 
 function heartbeat(){
-
-set(
-
-ref(
-window.db,
-"pages/online/"+
-window.SATKER_AKTIF
-),
-
-{
-
-lastSeen:
-Date.now()
-
+    set(ref(db, "pages/BT5Python/p120G412"), {
+        lastSeen: Date.now()
+    });
 }
 
-);
-
-}
-
-setInterval(
-heartbeat,
-2000
-);
-
+setInterval(heartbeat, 2000);
 </script>
   <script>
 function tampilkanTanggal() {
@@ -537,218 +443,5 @@ function tampilkanTanggal() {
 setInterval(tampilkanTanggal, 1000);
 tampilkanTanggal();
 </script>
-<div id="chatBox"
-
-style="
-display:none;
-position:fixed;
-right:20px;
-bottom:20px;
-width:320px;
-height:420px;
-background:black;
-border:1px solid #00ff00;
-border-radius:10px;
-padding:10px;
-z-index:9999;">
-
-<div
-style="
-font-weight:bold;
-margin-bottom:10px;">
-
-CHAT INTERNAL
-
-</div>
-
-<select
-id="tujuanChat"
-
-style="
-width:100%;
-margin-bottom:8px;
-background:black;
-color:#00ff00;">
-
-<option>
-
-GUDKAI
-
-</option>
-
-<option>
-
-SATINTEL
-
-</option>
-
-<option>
-
-SATPROV
-
-</option>
-
-<option>
-
-PROGAR
-
-</option>
-
-</select>
-
-<div
-id="chatList"
-
-style="
-height:260px;
-overflow:auto;
-border:1px solid #00ff00;
-padding:6px;
-margin-bottom:8px;">
-
-</div>
-
-<input
-id="chatInput"
-
-placeholder="Tulis pesan..."
-
-style="
-width:100%;
-background:black;
-color:#00ff00">
-
-<button
-id="kirimChat"
-class="btn primary"
-
-style="
-margin-top:8px;
-width:100%;">
-
-Kirim
-
-</button>
-</div>
-<script>
-
-let stopChat=null;
-
-function loadChat(){
-
-if(stopChat){
-stopChat();
-}
-
-const tujuan=
-document.getElementById(
-"tujuanChat"
-).value;
-
-const saya=
-window.SATKER_AKTIF;
-
-const room=
-[saya,tujuan]
-.sort()
-.join("_");
-
-document.getElementById(
-"chatList"
-).innerHTML="";
-
-stopChat=
-window.onChildAddedFirebase(
-window.ref(
-window.db,
-"chatRoom/"+room
-),
-(s)=>{
-const d=s.val();
-document.getElementById(
-"chatList"
-).innerHTML +=
-"<div style='margin-bottom:8px'>"
-+"<b>["+
-d.dari+
-"]</b><br>"+
-d.pesan+
-"<br><small>"+
-d.waktu+
-"</small></div>";
-});
-}
-document.getElementById(
-"pesanBtn"
-).onclick=()=>{
-const box=
-document.getElementById(
-"chatBox"
-);
-box.style.display=
-box.style.display==="block"
-?
-"none"
-:
-"block";
-loadChat();
-};
-document.getElementById(
-"tujuanChat"
-).onchange=
-loadChat;
-</script> 
-  
-<script>
-document.getElementById(
-"kirimChat"
-).onclick=
-async()=>{
-const txt=
-document.getElementById(
-"chatInput"
-)
-.value.trim();
-if(!txt)return;
-const tujuan=
-document.getElementById(
-"tujuanChat"
-)
-.value;
-const saya=
-window.SATKER_AKTIF;
-const room=
-[saya,tujuan]
-.sort()
-.join("_");
-await window.setFirebase(
-window.ref(
-window.db,
-"chatRoom/"+
-room+
-"/"+
-Date.now()
-),
-{
-dari:saya,
-ke:tujuan,
-pesan:txt,
-waktu:new Date()
-.toLocaleString(
-"id-ID"
-)});
-document.getElementById(
-"chatInput"
-).value="";
-loadChat();
-};
-</script>
 </body>
 </html>
-
-
-
-
-
-
-
