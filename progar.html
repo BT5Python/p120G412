@@ -633,12 +633,17 @@ Kirim
 </div>
 <script>
 
+window.addEventListener(
+"load",
+
+()=>{
+
 document
 .getElementById(
 "pesanBtn"
 )
 
-onclick=()=>{
+.onclick=()=>{
 
 const box=
 document.getElementById(
@@ -664,7 +669,7 @@ document
 "kirimChat"
 )
 
-onclick=
+.onclick=
 
 async()=>{
 
@@ -695,28 +700,22 @@ window.ref(
 
 window.db,
 
-"chat/"+
-
-Date.now()
+"chat/"+Date.now()
 
 ),
 
 {
 
 dari:
-
 window.SATKER_AKTIF,
 
 ke:
-
 tujuan,
 
 pesan:
-
 txt,
 
 waktu:
-
 new Date()
 .toLocaleString(
 "id-ID"
@@ -729,9 +728,7 @@ new Date()
 document
 .getElementById(
 "chatInput"
-)
-
-.value="";
+).value="";
 
 };
 
@@ -744,22 +741,17 @@ window.db,
 
 (s)=>{
 
-const d=
-s.val();
+const d=s.val();
 
 if(
 
 d.ke
-!==
-
-window.SATKER_AKTIF
+!==window.SATKER_AKTIF
 
 &&
 
 d.dari
-!==
-
-window.SATKER_AKTIF
+!==window.SATKER_AKTIF
 
 ){
 
@@ -772,7 +764,7 @@ document
 "chatList"
 )
 
-innerHTML
+.innerHTML
 
 +=
 
@@ -789,6 +781,10 @@ d.pesan+
 d.waktu+
 
 "</small></div>";
+
+}
+
+);
 
 }
 
