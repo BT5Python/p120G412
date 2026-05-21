@@ -80,7 +80,7 @@ footer{margin-top:16px;display:flex;justify-content:space-between;align-items:ce
       <div class="logo"><b style="color:#ffff00;">ISU</b></div>
       <div>
         <h2 style="color:#00ff00; margin:4px 0 0 0; font-weight:600;">INTEGRATED SYSTEM UPLOAD</h2>
-        <h1>PROGAR PUSLAT KODIKLATAU</h1>        
+        <h1>GUDKAI PUSLAT KODIKLATAU</h1>        
         <p style="font-size:12px;color:#ffff00">
         DATE/TIME : <span class="code-private" id="tanggal"></span>
         </p>
@@ -176,9 +176,37 @@ font-weight:Normal;">
         <p class="small">Daftar file yang akan diupload.</p>
         <ul id="fileList" class="file-list"></ul>
         <footer>
-          <span id="count">0 file</span>
-          <button id="uploadBtn" class="btn primary">Upload</button>
-        </footer>
+
+<span id="count">
+
+0 file
+
+</span>
+
+<div
+style="
+display:flex;
+gap:8px;">
+
+<button
+id="pesanBtn"
+class="btn">
+
+Chat
+
+</button>
+
+<button
+id="uploadBtn"
+class="btn primary">
+
+Upload
+
+</button>
+
+</div>
+
+</footer>
       </aside>
     </section>
 
@@ -442,6 +470,256 @@ function tampilkanTanggal() {
 // update tiap detik biar live
 setInterval(tampilkanTanggal, 1000);
 tampilkanTanggal();
+</script>
+<div id="chatBox"
+
+style="
+display:none;
+position:fixed;
+right:20px;
+bottom:20px;
+width:320px;
+height:420px;
+background:black;
+border:1px solid #00ff00;
+border-radius:10px;
+padding:10px;
+z-index:9999;">
+
+<div
+style="
+font-weight:bold;
+margin-bottom:10px;">
+
+CHAT INTERNAL
+
+</div>
+
+<select
+id="tujuanChat"
+
+style="
+width:100%;
+margin-bottom:8px;
+background:black;
+color:#00ff00;">
+
+<option>
+
+GUDKAI
+
+</option>
+
+<option>
+
+SATINTEL
+
+</option>
+
+<option>
+
+SATPROV
+
+</option>
+
+<option>
+
+PROGAR
+
+</option>
+
+</select>
+
+<div
+id="chatList"
+
+style="
+height:260px;
+overflow:auto;
+border:1px solid #00ff00;
+padding:6px;
+margin-bottom:8px;">
+
+</div>
+
+<input
+id="chatInput"
+
+placeholder="Tulis pesan..."
+
+style="
+width:100%;
+background:black;
+color:#00ff00">
+
+<button
+id="kirimChat"
+class="btn primary"
+
+style="
+margin-top:8px;
+width:100%;">
+
+Kirim
+
+</button>
+
+</div>
+<script>
+
+document
+.getElementById(
+"pesanBtn"
+)
+
+.onclick=()=>{
+
+const box=
+
+document
+.getElementById(
+"chatBox"
+);
+
+box.style.display=
+
+box.style.display
+==="none"
+
+?
+
+"block"
+
+:
+
+"none";
+
+};
+
+document
+.getElementById(
+"kirimChat"
+)
+
+.onclick=
+
+async()=>{
+
+const txt=
+
+document
+.getElementById(
+"chatInput"
+)
+.value;
+
+const tujuan=
+
+document
+.getElementById(
+"tujuanChat"
+)
+.value;
+
+if(!txt)return;
+
+await setFirebase(
+
+ref(
+
+window.db,
+
+"chat/"+
+
+Date.now()
+
+),
+
+{
+
+dari:
+
+SATKER_AKTIF,
+
+ke:
+
+tujuan,
+
+pesan:
+
+txt,
+
+waktu:
+
+Date.now()
+
+}
+
+);
+
+document
+.getElementById(
+"chatInput"
+)
+.value="";
+
+};
+
+onChildAddedFirebase(
+
+ref(
+window.db,
+"chat"
+),
+
+(s)=>{
+
+const d=
+s.val();
+
+if(
+
+d.ke
+!==
+
+SATKER_AKTIF
+
+&&
+
+d.dari
+!==
+
+SATKER_AKTIF
+
+){
+
+return;
+
+}
+
+document
+.getElementById(
+"chatList"
+)
+
+.innerHTML
+
++=
+
+"<div>["+
+
+d.dari+
+
+"] "+
+
+d.pesan+
+
+"</div>";
+
+}
+
+);
+
 </script>
 </body>
 </html>
