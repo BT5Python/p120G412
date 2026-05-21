@@ -427,28 +427,94 @@ document.addEventListener("click", function() {
 }, { once: true });
 </script>
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-const firebaseConfig = {
-  apiKey: "AIzaSyC7SkdwajJl6pzXehN6zpeycNfT5ZHFXP4",
-  authDomain: "portalmonitoring-a0926.firebaseapp.com",
-  databaseURL: "https://portalmonitoring-a0926-default-rtdb.asia-southeast1.firebasedatabase.app/",
-  projectId: "portalmonitoring-a0926",
-  storageBucket: "portalmonitoring-a0926.appspot.com",
-  messagingSenderId: "27756738323",
-  appId: "1:27756738323:web:010277cc1eb9b7cdfa97cd"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-
-function heartbeat(){
-    set(ref(db, "pages/BT5Python/p120G412"), {
-        lastSeen: Date.now()
-    });
+import {
+initializeApp
 }
 
-setInterval(heartbeat, 2000);
+from
+"https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+
+import {
+
+getDatabase,
+ref,
+set,
+onChildAdded
+
+}
+
+from
+
+"https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+const firebaseConfig = {
+apiKey: "AIzaSyC7SkdwajJl6pzXehN6zpeycNfT5ZHFXP4",
+authDomain: "portalmonitoring-a0926.firebaseapp.com",
+databaseURL: "https://portalmonitoring-a0926-default-rtdb.asia-southeast1.firebasedatabase.app/",
+projectId: "portalmonitoring-a0926",
+storageBucket: "portalmonitoring-a0926.appspot.com",
+messagingSenderId: "27756738323",
+appId: "1:27756738323:web:010277cc1eb9b7cdfa97cd"
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+window.db =
+getDatabase(app);
+
+window.ref =
+ref;
+
+window.setFirebase =
+set;
+
+window.onChildAddedFirebase =
+onChildAdded;
+
+window.SATKER_AKTIF =
+
+localStorage.getItem(
+"satkerAktif"
+)
+
+||
+
+prompt(
+"Masukkan SATKER anda"
+);
+
+localStorage.setItem(
+"satkerAktif",
+window.SATKER_AKTIF
+);
+
+function heartbeat(){
+
+set(
+
+ref(
+window.db,
+"pages/online/"+
+window.SATKER_AKTIF
+),
+
+{
+
+lastSeen:
+Date.now()
+
+}
+
+);
+
+}
+
+setInterval(
+heartbeat,
+2000
+);
+
 </script>
   <script>
 function tampilkanTanggal() {
@@ -572,27 +638,24 @@ document
 "pesanBtn"
 )
 
-.onclick=()=>{
+onclick=()=>{
 
 const box=
-
-document
-.getElementById(
+document.getElementById(
 "chatBox"
 );
 
 box.style.display=
 
-box.style.display
-==="none"
+box.style.display==="block"
 
 ?
 
-"block"
+"none"
 
 :
 
-"none";
+"block";
 
 };
 
@@ -601,7 +664,7 @@ document
 "kirimChat"
 )
 
-.onclick=
+onclick=
 
 async()=>{
 
@@ -611,7 +674,9 @@ document
 .getElementById(
 "chatInput"
 )
-.value;
+
+.value
+.trim();
 
 const tujuan=
 
@@ -619,13 +684,14 @@ document
 .getElementById(
 "tujuanChat"
 )
+
 .value;
 
 if(!txt)return;
 
-await setFirebase(
+await window.setFirebase(
 
-ref(
+window.ref(
 
 window.db,
 
@@ -639,7 +705,7 @@ Date.now()
 
 dari:
 
-SATKER_AKTIF,
+window.SATKER_AKTIF,
 
 ke:
 
@@ -651,7 +717,10 @@ txt,
 
 waktu:
 
-Date.now()
+new Date()
+.toLocaleString(
+"id-ID"
+)
 
 }
 
@@ -661,13 +730,14 @@ document
 .getElementById(
 "chatInput"
 )
+
 .value="";
 
 };
 
-onChildAddedFirebase(
+window.onChildAddedFirebase(
 
-ref(
+window.ref(
 window.db,
 "chat"
 ),
@@ -682,14 +752,14 @@ if(
 d.ke
 !==
 
-SATKER_AKTIF
+window.SATKER_AKTIF
 
 &&
 
 d.dari
 !==
 
-SATKER_AKTIF
+window.SATKER_AKTIF
 
 ){
 
@@ -702,19 +772,23 @@ document
 "chatList"
 )
 
-.innerHTML
+innerHTML
 
 +=
 
-"<div>["+
+"<div style='margin-bottom:5px'>["+
 
 d.dari+
 
-"] "+
+"]<br>"+
 
 d.pesan+
 
-"</div>";
+"<br><small>"+
+
+d.waktu+
+
+"</small></div>";
 
 }
 
