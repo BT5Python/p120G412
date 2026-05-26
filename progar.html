@@ -284,6 +284,53 @@ font-weight:Normal;">
     </div>
   </div>
 </div>
+<script type="module">
+import {
+initializeApp
+}
+from
+"https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged
+}
+from
+"https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+const firebaseConfig = {
+apiKey:
+"AIzaSyC7SkdwajJl6pzXehN6zpeycNfT5ZHFXP4",
+
+authDomain:
+"portalmonitoring-a0926.firebaseapp.com",
+
+projectId:
+"portalmonitoring-a0926"
+};
+
+const app =
+initializeApp(
+firebaseConfig
+);
+
+const auth =
+getAuth(app);
+
+onAuthStateChanged(
+auth,
+(user)=>{
+
+if(!user){
+
+window.location.href =
+"login.html";
+
+}
+
+}
+);
+</script>
 <script>
 const WEBAPP_URL =
 "https://script.google.com/macros/s/AKfycbzpdBDipLVv0loZYU4Z1cmzahoC-sGKZ1T8H_QRPZ-ABRRqy0G8m0kw1-hczlJuP7xVtg/exec";
