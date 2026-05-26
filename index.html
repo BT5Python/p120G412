@@ -215,14 +215,30 @@ window.location.href =
 "progar.html";
 }
 catch(e){
-alert(
-e.code +
-"\n" +
+
+console.log(
+"ERROR:",
+e.code,
 e.message
 );
-console.log(e);
-}
-return false;
+
+document.body.innerHTML +=
+`
+<div style="
+position:fixed;
+bottom:10px;
+left:10px;
+background:black;
+color:red;
+padding:10px;
+z-index:9999;
+font-family:Courier New;
+">
+${e.code}<br>
+${e.message}
+</div>
+`;
+
 }
 </script>
 </body>
