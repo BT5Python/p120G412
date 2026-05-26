@@ -127,6 +127,7 @@ color:black;
 </head>
 <body>
 <script type="module">
+
 import {
 initializeApp
 }
@@ -135,20 +136,34 @@ from
 
 import {
 getAuth,
-onAuthStateChanged
+signInWithEmailAndPassword
 }
 from
 "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 const firebaseConfig = {
+
 apiKey:
 "AIzaSyC7SkdwajJl6pzXehN6zpeycNfT5ZHFXP4",
 
 authDomain:
 "portalmonitoring-a0926.firebaseapp.com",
 
+databaseURL:
+"https://portalmonitoring-a0926-default-rtdb.asia-southeast1.firebasedatabase.app/",
+
 projectId:
-"portalmonitoring-a0926"
+"portalmonitoring-a0926",
+
+storageBucket:
+"portalmonitoring-a0926.appspot.com",
+
+messagingSenderId:
+"27756738323",
+
+appId:
+"1:27756738323:web:010277cc1eb9b7cdfa97cd"
+
 };
 
 const app =
@@ -159,19 +174,45 @@ firebaseConfig
 const auth =
 getAuth(app);
 
-onAuthStateChanged(
-auth,
-(user)=>{
+window.loginSuccess =
+async function(event){
 
-if(!user){
+event.preventDefault();
+
+const email =
+event.target.email.value.trim();
+
+const pass =
+event.target.password.value.trim();
+
+try{
+
+await signInWithEmailAndPassword(
+auth,
+email,
+pass
+);
 
 window.location.href =
-"login.html";
+"progar.html";
 
 }
+catch(e){
 
-}
+alert(
+e.code +
+"\n" +
+e.message
 );
+
+console.log(e);
+
+}
+
+return false;
+
+}
+
 </script>
 
 <div class="wrap">
