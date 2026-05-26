@@ -216,8 +216,11 @@ window.location.href =
 }
 catch(e){
 alert(
-"LOGIN GAGAL"
+e.code +
+"\n" +
+e.message
 );
+console.log(e);
 }
 return false;
 }
