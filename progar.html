@@ -655,5 +655,37 @@ this.value;
 }
 );
 </script>
+<script>
+
+// TIMER LOGIN 10 DETIK
+let fileDipilih =
+false;
+// kalau belum klik pilih file
+setTimeout(()=>{
+if(
+!fileDipilih
+){
+alert(
+"SESSION EXPIRED"
+);
+window.location.replace(
+"./index.html"
+);
+}
+},
+10000);
+// saat klik pilih file
+document
+.getElementById(
+"fileInput"
+)
+.addEventListener(
+"click",
+()=>{
+fileDipilih =
+true;
+}
+);
+</script>
 </body>
 </html>
