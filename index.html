@@ -202,13 +202,9 @@ window.loginSuccess =
 async function(event){
 event.preventDefault();
 const email =
-event.target.admin
-.value
-.trim();
+event.target.email.value.trim();
 const pass =
-event.target.kodiklatau
-.value
-.trim();
+event.target.password.value.trim();
 try{
 await signInWithEmailAndPassword(
 auth,
