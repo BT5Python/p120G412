@@ -245,21 +245,21 @@ return false;
 // KIRIM OTP
 window.sendOTP = function(){
 
-const phoneNumber =
-document.getElementById("phone").value;
+const phoneNumber = document.getElementById("phone").value;
 
-window.recaptchaVerifier =
-new RecaptchaVerifier(auth, "recaptcha-container", {
+window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
 size: "normal"
 });
+
+recaptchaVerifier.render();
 
 signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier)
 .then((result) => {
 confirmationResult = result;
-alert("OTP terkirim ke HP");
+alert("OTP terkirim");
 })
 .catch((err) => {
-alert(err.message);
+alert(err.code + "\n" + err.message);
 });
 
 };
