@@ -7,7 +7,6 @@
 <title>evolution is my revolution - Login Portal</title>
 
 <style>
-
 *{
 margin:0;
 padding:0;
@@ -74,10 +73,6 @@ text-align:center;
 outline:none;
 }
 
-input::placeholder{
-color:#ccc;
-}
-
 button{
 width:100%;
 padding:12px;
@@ -87,180 +82,63 @@ border:none;
 border-radius:6px;
 font-size:1em;
 cursor:pointer;
-transition:.3s;
 }
 
 button:hover{
 background:#00cc00;
 box-shadow:0 0 12px #00ff00;
 }
-
 </style>
 </head>
 
 <body>
 
 <!-- VIDEO -->
-<video
-id="bg-video"
-autoplay
-muted
-loop
-playsinline>
-
-<source
-src="Desain tanpa judul (2).mp4"
-type="video/mp4">
-
+<video id="bg-video" autoplay muted loop playsinline>
+<source src="Desain tanpa judul (2).mp4" type="video/mp4">
 </video>
 
 <div class="overlay"></div>
 
 <!-- AUDIO -->
 <audio autoplay loop>
-
-<source
-src="Helloween-Forever-And-One-Neverland.aac"
-type="audio/mpeg">
-
+<source src="Helloween-Forever-And-One-Neverland.aac" type="audio/mpeg">
 </audio>
 
 <!-- LOGIN -->
-
 <div class="content">
 
 <h1>PROGAR</h1>
 <h1>PUSLAT KODIKLATAU</h1>
 
-<form
-onsubmit="return loginSuccess(event)">
+<form onsubmit="return loginSuccess(event)">
 
-<input
-type="text"
-id="phone"
-placeholder="Nomor HP +628211747988"
-autocomplete="off">
+<input type="email" name="email" placeholder="Email" required autocomplete="off">
 
-<input
-type="password"
-name="password"
-placeholder="Password"
-required
-autocomplete="off">
+<input type="password" name="password" placeholder="Password" required autocomplete="off">
 
-<button type="submit">
-
-LOGIN
-
-</button>
+<button type="submit">LOGIN</button>
 
 </form>
-<div style="margin-top:20px">
 
-<div id="recaptcha-container"></div>
+<!-- OTP SECTION (HIDDEN) -->
+<div id="otp-section" style="display:none; margin-top:20px">
 
-<input
-type="text"
-id="otp"
-placeholder="Kode OTP"
-autocomplete="off">
+<input type="text" id="phone" placeholder="+628211747988">
 
-<button type="button" onclick="sendOTP()">
-KIRIM OTP
-</button>
+<div id="recaptcha-container" style="margin:10px 0;"></div>
 
-<button type="button" onclick="verifyOTP()">
-VERIFIKASI OTP
-</button>
+<button type="button" onclick="sendOTP()">KIRIM OTP</button>
+
+<input type="text" id="otp" placeholder="Kode OTP">
+
+<button type="button" onclick="verifyOTP()">VERIFIKASI OTP</button>
 
 </div>
 
 </div>
-
-<!-- FULLSCREEN -->
-
-<script>
-
-function forceFullscreen(){
-
-const elem=
-document.documentElement;
-
-if(
-elem.requestFullscreen
-){
-
-elem.requestFullscreen()
-.catch(()=>{});
-
-}
-
-}
-
-function isStandalone(){
-
-return(
-
-window.matchMedia(
-"(display-mode: standalone)"
-).matches ||
-
-window.navigator.standalone===true
-
-);
-
-}
-
-if(
-isStandalone()
-){
-
-setTimeout(
-forceFullscreen,
-500
-);
-
-}
-
-if(
-
-navigator.userAgent
-.includes("wv")
-
-||
-
-navigator.userAgent
-.includes("Android")
-
-){
-
-setTimeout(
-forceFullscreen,
-800
-);
-
-}
-
-document.addEventListener(
-
-"click",
-
-function(){
-
-forceFullscreen();
-
-},
-
-{
-once:true
-}
-
-);
-
-</script>
 
 <!-- FIREBASE -->
-
 <script type="module">
 
 import { initializeApp } 
@@ -290,7 +168,7 @@ const auth = getAuth(app);
 
 let confirmationResult;
 
-// EMAIL LOGIN (tetap seperti kamu)
+// LOGIN EMAIL + PASSWORD
 window.loginSuccess = async function(event){
 
 event.preventDefault();
@@ -299,8 +177,17 @@ const email = event.target.email.value.trim();
 const password = event.target.password.value.trim();
 
 try{
+
 await signInWithEmailAndPassword(auth, email, password);
-alert("Email login sukses, lanjut OTP HP");
+
+// tampilkan OTP
+document.getElementById("otp-section").style.display = "block";
+
+alert("Login sukses! lanjut verifikasi OTP");
+
+document.getElementById("otp-section")
+.scrollIntoView({behavior:"smooth"});
+
 }
 catch(e){
 alert(e.message);
@@ -309,7 +196,7 @@ alert(e.message);
 return false;
 };
 
-// 🔥 KIRIM OTP HP
+// KIRIM OTP
 window.sendOTP = function(){
 
 const phoneNumber =
@@ -331,7 +218,7 @@ alert(err.message);
 
 };
 
-// 🔥 VERIFIKASI OTP
+// VERIFIKASI OTP
 window.verifyOTP = function(){
 
 const code =
