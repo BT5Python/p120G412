@@ -187,34 +187,28 @@ VERIFIKASI OTP
 <!-- FIREBASE -->
 <script type="module">
 
-import { initializeApp } 
-from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {
+initializeApp
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 
 import {
 getAuth,
 signInWithEmailAndPassword,
-RecaptchaVerifier,
-signInWithPhoneNumber
-} 
-from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+sendEmailVerification
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC7SkdwaJjl6pzXehN6zpeycNfTZ5HFXP4",
   authDomain: "portalmonitoring-a0926.firebaseapp.com",
-  databaseURL: "https://portalmonitoring-a0926-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "portalmonitoring-a0926",
   storageBucket: "portalmonitoring-a0926.firebasestorage.app",
   messagingSenderId: "277567382328",
-  appId: "1:277567382328:web:010277cc1eb9b7cdfa97cd",
-  measurementId: "G-ENM8FDGX6E"
+  appId: "1:277567382328:web:010277cc1eb9b7cdfa97cd"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-let confirmationResult;
-
-// LOGIN EMAIL + PASSWORD
 window.loginSuccess = async function(event){
 
 event.preventDefault();
@@ -224,43 +218,29 @@ const password = event.target.password.value.trim();
 
 try{
 
-await signInWithEmailAndPassword(auth, email, password);
+const userCred = await signInWithEmailAndPassword(auth, email, password);
 
-// tampilkan OTP
-document.getElementById("otp-section").style.display = "block";
+const user = userCred.user;
 
-alert("Login sukses! lanjut verifikasi OTP");
+// 🔥 CEK EMAIL VERIFIED
+if(!user.emailVerified){
 
-document.getElementById("otp-section")
-.scrollIntoView({behavior:"smooth"});
+await sendEmailVerification(user);
+
+alert("Email belum diverifikasi. Link verifikasi sudah dikirim ke email kamu.");
+
+return;
+
+}
+
+// ✔ LOGIN BERHASIL
+alert("Login berhasil");
+window.location.href = "progar.html";
 
 }
 catch(e){
-alert(e.message);
+alert(e.code + "\n" + e.message);
 }
-
-return false;
-};
-
-// KIRIM OTP
-window.sendOTP = function(){
-
-const phoneNumber = document.getElementById("phone").value;
-
-window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
-size: "normal"
-});
-
-recaptchaVerifier.render();
-
-signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier)
-.then((result) => {
-confirmationResult = result;
-alert("OTP terkirim");
-})
-.catch((err) => {
-alert(err.code + "\n" + err.message);
-});
 
 };
 
