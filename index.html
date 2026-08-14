@@ -298,52 +298,19 @@ auth,
 email,
 password
 );
-
-/* AMBIL URL DARI FIREBASE */
-
-const snap=
-
-await get(
-
-ref(
-db,
-"config/redirect"
-)
-
-);
-
-const target=
-
-snap.val();
-
-/* REDIRECT */
-
 window.location.href=
-
 "progar.html";
-
 }
-
 catch(e){
-
 alert(
-
 e.code+
-
 "\n\n"+
-
 e.message
-
 );
-
 console.log(e);
-
 }
-
 return false;
-
 }
-
 </script>
 </body>
 </html>
